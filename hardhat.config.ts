@@ -18,8 +18,8 @@ const {
   ETHERSCAN_API,
   ACCOUNT_PRIVATE_KEYS,
   FORK_MAINNET,
-  BSC_MAINNET_API = "https://bsc-dataseed.binance.org/",
-  BSC_TESTNET_API = "https://data-seed-prebsc-2-s3.binance.org:8545/"
+  MAINNET_API = "https://babel-api.mainnet.iotex.io",
+  TESTNET_API = "https://babel-api.testnet.iotex.io"
 } = process.env
 
 let config: HardhatUserConfig = {
@@ -29,14 +29,14 @@ let config: HardhatUserConfig = {
       hardfork: CODE_COVERAGE ? "berlin" : "london",
     },
     mainnet: {
-      url: BSC_MAINNET_API,
-      gas: 6990000,
-      gasPrice: 5000000000,
+      url: MAINNET_API,
+      gas: 8000000,
+      gasPrice: 1000000000000,
     },
     testnet: {
-      url: BSC_TESTNET_API,
-      gas: 6990000,
-      gasPrice: 10000000000,
+      url: TESTNET_API,
+      gas: 8000000,
+      gasPrice: 1000000000000,
     },
   },
   paths: {
@@ -70,13 +70,13 @@ let config: HardhatUserConfig = {
   namedAccounts: {
     deployer: {
       default: 0, // here this will by default take the first account as deployer
-      56: 0, // similarly on mainnet it will take the first account as deployer. Note though that depending on how hardhat network are configured, the account 0 on one network can be different than on another
-      97: 0,
+      4689: 0, // similarly on mainnet it will take the first account as deployer. Note though that depending on how hardhat network are configured, the account 0 on one network can be different than on another
+      4690: 0,
     },
     libraryDeployer: {
       default: 1, // use a different account for deploying libraries on the hardhat network
-      56: 0, // use the same address as the main deployer on mainnet
-      97: 0,
+      4689: 0, // use the same address as the main deployer on mainnet
+      4690: 0,
     },
   },
   spdxLicenseIdentifier: {
@@ -112,9 +112,9 @@ if (FORK_MAINNET === "true" && config.networks) {
       hardhat: {
         ...config.networks.hardhat,
         forking: {
-          url: BSC_MAINNET_API || "",
+          url: MAINNET_API || "",
         },
-        chainId: 56,
+        chainId: 4689,
       },
     },
     external: {

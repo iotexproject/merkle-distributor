@@ -18,7 +18,8 @@ interface IOwnable {
 
 contract Deployer {
     event NewDistributor(
-        address indexed deployer,
+        uint256 index,
+        address deployer,
         address distributorAddress,
         address token,
         bytes32 merkleRoot
@@ -36,6 +37,7 @@ contract Deployer {
     }
 
     function deploy(
+        uint256 index,
         address distributorAddress,
         address token,
         bytes32 merkleRoot
@@ -46,7 +48,7 @@ contract Deployer {
             merkleRoot
         );
         IOwnable(cloned).transferOwnership(msg.sender);
-        emit NewDistributor(msg.sender, cloned, token, merkleRoot);
+        emit NewDistributor(index, msg.sender, cloned, token, merkleRoot);
         return cloned;
     }
 }

@@ -17,6 +17,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       "Deployer",
       { from: deployer, log: true },
       "deploy",
+      0,
       (
         await get("MerkleDistributor")
       ).address,
