@@ -8,29 +8,40 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { execute, get, getOrNull, log, read, save } = deployments
   const { deployer } = await getNamedAccounts()
 
-  const { merkleRoot } = mtree
+  const { merkleRoot, tokenTotal } = mtree
   const distributor = await getOrNull("USDTDistributor")
   if (distributor) {
     log(`reusing "USDTDistributor" at ${distributor.address}`)
   } else {
+    await execute(
+      "USDT",
+      { from: deployer, log: true },
+      "approve",
+      (
+        await get("Deployer")
+      ).address,
+      tokenTotal
+    )
+
     const receipt = await execute(
       "Deployer",
       { from: deployer, log: true },
       "deploy",
-      0,
+      1,
       (
         await get("MerkleDistributor")
       ).address,
       (
         await get("USDT")
       ).address,
+      tokenTotal,
       merkleRoot
     )
 
     const newEvent = receipt?.events?.find(
       (e: any) => e["event"] == "NewDistributor",
     )
-    const distributorAddress = newEvent["args"]["distributorAddress"]
+    const distributorAddress = newEvent["args"]["distributor"]
     log(`deployed USDT distributor (targeting "MerkleDistributor") at ${distributorAddress}`)
     await save("USDTDistributor", {
       abi: (await get("MerkleDistributor")).abi,

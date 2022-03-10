@@ -1,5 +1,5 @@
 {
-  "address": "0x73f3401113A0dc0A1779a778045FbE9a103C7Ed3",
+  "address": "0x24f417AE9d1e64dC6DF15c061E42AE6797540663",
   "abi": [
     {
       "anonymous": false,
@@ -165,11 +165,16 @@
       ],
       "name": "deposit",
       "outputs": [],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     },
     {
       "inputs": [
+        {
+          "internalType": "address",
+          "name": "wNative_",
+          "type": "address"
+        },
         {
           "internalType": "address",
           "name": "token_",
@@ -266,6 +271,19 @@
     },
     {
       "inputs": [],
+      "name": "wNative",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "withdrawAllRewardTokens",
       "outputs": [],
       "stateMutability": "nonpayable",
@@ -301,6 +319,10 @@
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
     }
   ]
 }

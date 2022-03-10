@@ -3,6 +3,8 @@
 pragma solidity 0.6.12;
 
 interface IMerkleDistributor {
+    function wNative() external view returns (address);
+
     function token() external view returns (address);
 
     function merkleRoot() external view returns (bytes32);

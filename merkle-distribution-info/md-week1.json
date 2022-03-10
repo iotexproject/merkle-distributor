@@ -1,48 +1,19 @@
 {
-  "merkleRoot": "0x710f1132d7835c5f1b9cf617d85a712deda0b0df954525cd9a25591c3134c8d0",
-  "tokenTotal": "0x3b000a968163f0a57b400000",
+  "merkleRoot": "0x36fd6eedec3b3066f32bdcc285f81c8027693922c2392fe164ac0eb3a14d1832",
+  "tokenTotal": "0x0de0b6b3a7640000",
   "claims": {
-    "0x1904BFcb93EdC9BF961Eead2e5c0de81dCc1D37D": {
-      "index": 0,
-      "amount": "0x100000000000000000000000",
-      "proof": [
-        "0x83b79fe0187a1edab4c1ab66c661fa5fca3e11c46184b315a53764480599952b",
-        "0x859773c7405345fe884734775f6d1c492cd1490da3a8b9a324a72d9d07bc7985",
-        "0xf42e9629be2cf67a0ffc8a098a1f8c50851c2ecc64bd57e63532a6b40af0ed9c"
-      ]
-    },
     "0x261D8a9B3c46E0fC7e99c34b19bE8eCe99E266fD": {
-      "index": 1,
-      "amount": "0x050000000000000000000000",
+      "index": 0,
+      "amount": "0x06f05b59d3b20000",
       "proof": [
-        "0xc859a227f09be4e2b2be4084c380e1168fd2533fb8c0c36b7eb6c1b629ba6574"
-      ]
-    },
-    "0x3E64f9f8cAAA7cBe390f9aE1776a562A3EeB14AB": {
-      "index": 2,
-      "amount": "0x200000000000000000000000",
-      "proof": [
-        "0xad246af3d0e0dd414cd528e294baa0c8a82e3158ecf87adec3f9c696def0b3f7",
-        "0x859773c7405345fe884734775f6d1c492cd1490da3a8b9a324a72d9d07bc7985",
-        "0xf42e9629be2cf67a0ffc8a098a1f8c50851c2ecc64bd57e63532a6b40af0ed9c"
+        "0x183a617f9adc7feb6f413973a9544f743bde710ecf1dcc590eee7cc375fa2376"
       ]
     },
     "0x3a34658A7A12BDc1ce79069c72DC9A1b3fd7Bd69": {
-      "index": 3,
-      "amount": "0x060000000000000000000000",
+      "index": 1,
+      "amount": "0x06f05b59d3b20000",
       "proof": [
-        "0x1cf5b428fc21c4c6cd9c9dd4af8f6f0872ed99bd3eb47e820281c21ad3d2f311",
-        "0x0ca6d22aa0564937af51ebc98397e404d214b9cf36a089c1478d5c2fc1d808c2",
-        "0xf42e9629be2cf67a0ffc8a098a1f8c50851c2ecc64bd57e63532a6b40af0ed9c"
-      ]
-    },
-    "0xD300504063836e7774564E58B8a17Ed50798Bed7": {
-      "index": 4,
-      "amount": "0x0a968163f0a57b400000",
-      "proof": [
-        "0x3c757d9cac3a5d0c5d8c853360c97a9c5b01eae24104dc718aefad4baea12fe6",
-        "0x0ca6d22aa0564937af51ebc98397e404d214b9cf36a089c1478d5c2fc1d808c2",
-        "0xf42e9629be2cf67a0ffc8a098a1f8c50851c2ecc64bd57e63532a6b40af0ed9c"
+        "0x78f85ccaf1335c7582a5a9e4d7540814ddb470b6eab272ae2df5537f6f16300d"
       ]
     }
   }

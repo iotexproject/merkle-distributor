@@ -5,11 +5,14 @@ pragma solidity 0.6.12;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/cryptography/MerkleProof.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
 import "./interfaces/IMerkleDistributor.sol";
+import "./interfaces/IWETH.sol";
 
 contract MerkleDistributor is IMerkleDistributor, OwnableUpgradeable {
     using SafeERC20 for IERC20;
 
+    address public override wNative;
     address public override token;
     bytes32 public override merkleRoot;
 
@@ -20,11 +23,24 @@ contract MerkleDistributor is IMerkleDistributor, OwnableUpgradeable {
     event WithdrawAllRewardTokens(address indexed withdrawer, uint256 amount);
     event Deposit(address indexed depositor, uint256 amount);
 
+    modifier transferTokenToVault(uint256 value) {
+        if (msg.value != 0) {
+            require(token == wNative, "token is not wNative");
+            require(value == msg.value, "value != msg.value");
+            IWETH(wNative).deposit{ value: msg.value }();
+        } else {
+            IERC20(token).safeTransferFrom(msg.sender, address(this), value);
+        }
+        _;
+    }
+
     function initialize(
+        address wNative_,
         address token_,
         bytes32 merkleRoot_
     ) external virtual initializer {
         __Ownable_init();
+        wNative = wNative_;
         token = token_;
         merkleRoot = merkleRoot_;
     }
@@ -51,39 +67,47 @@ contract MerkleDistributor is IMerkleDistributor, OwnableUpgradeable {
     ) external override {
         require(!isClaimed(index), "MerkleDistributor::claim:: drop already claimed");
 
-        // Verify the merkle proof.
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));
         require(MerkleProof.verify(merkleProof, merkleRoot, node), "MerkleDistributor::claim:: invalid proof");
 
-        // Mark it claimed and send the token.
         _setClaimed(index);
-        require(IERC20(token).transfer(account, amount), "MerkleDistributor::claim:: transfer failed");
+        _safeUnwrap(account, amount);
 
         emit Claimed(index, account, amount);
     }
 
-    // Deposit token for merkle distribution
-    function deposit(uint256 _amount) external onlyOwner {
-        IERC20(token).safeTransferFrom(msg.sender, address(this), _amount);
+    function deposit(uint256 _amount)
+        external
+        payable
+        transferTokenToVault(_amount)
+    {
         emit Deposit(msg.sender, _amount);
     }
 
-    // Emergency withdraw tokens for admin
     function withdrawTokens(address _token, uint256 _amount) external onlyOwner {
         IERC20(_token).safeTransfer(msg.sender, _amount);
         emit WithdrawTokens(msg.sender, _token, _amount);
     }
 
-    // Emergency withdraw reward tokens for admin
     function withdrawRewardTokens(uint256 _amount) external onlyOwner {
-        IERC20(token).safeTransfer(msg.sender, _amount);
+        _safeUnwrap(msg.sender, _amount);
         emit WithdrawRewardTokens(msg.sender, _amount);
     }
 
-    // Emergency withdraw ALL reward tokens for admin
     function withdrawAllRewardTokens() external onlyOwner {
         uint256 amount = IERC20(token).balanceOf(address(this));
-        IERC20(token).safeTransfer(msg.sender, amount);
+        _safeUnwrap(msg.sender, amount);
         emit WithdrawAllRewardTokens(msg.sender, amount);
     }
+
+    function _safeUnwrap(address to, uint256 amount) internal {
+        if (token == wNative) {
+            IWETH(token).withdraw(amount);
+            Address.sendValue(payable(to), amount);
+        } else {
+            IERC20(token).safeTransfer(to, amount);
+        }
+    }
+
+    receive() external payable {}
 }
