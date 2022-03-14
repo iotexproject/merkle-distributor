@@ -17,6 +17,14 @@ interface IDistributor {
     function deposit(uint256 _amount) external payable;
 }
 
+interface IDistributorERC721 {
+    function initialize(
+        address token_,
+        address holder_,
+        bytes32 merkleRoot_
+    ) external;
+}
+
 interface IOwnable {
     function transferOwnership(address newOwner) external;
 }
@@ -34,6 +42,16 @@ contract Deployer {
         uint256 amount,
         bytes32 merkleRoot
     );
+
+    event NewDistributorERC721(
+        uint256 index,
+        address deployer,
+        address distributor,
+        address token,
+        address holder,
+        bytes32 merkleRoot
+    );
+
     event NewClone(address indexed target, address cloneAddress);
 
     constructor(address _wNative) public {
@@ -74,6 +92,25 @@ contract Deployer {
 
         IOwnable(cloned).transferOwnership(msg.sender);
         emit NewDistributor(index, msg.sender, cloned, token, amount, merkleRoot);
+        return cloned;
+    }
+
+    function deployERC721(
+        uint256 index,
+        address distributor,
+        address token,
+        address holder,
+        bytes32 merkleRoot
+    ) external payable returns (address) {
+        address cloned = _clone(distributor);
+        IDistributorERC721(cloned).initialize(
+            token,
+            holder,
+            merkleRoot
+        );
+
+        IOwnable(cloned).transferOwnership(msg.sender);
+        emit NewDistributorERC721(index, msg.sender, cloned, token, holder, merkleRoot);
         return cloned;
     }
 
